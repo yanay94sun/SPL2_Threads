@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MessageBusImplTest {
-    MessageBus messageBus;
+public class MessageBusImplTest { // why not extends testCase????????????????????
+     private MessageBus messageBus;
+    // maybe need to use annonimus class of micro service for the tests
 
     @BeforeEach
     void setUp() {
@@ -19,7 +20,7 @@ public class MessageBusImplTest {
     }
 
     @Test
-    void complete() {
+    void complete() { // need to add "test" in the start of the name of the function????? ALL
     }
 
     @Test
@@ -31,6 +32,6 @@ public class MessageBusImplTest {
     }
 
     @Test
-    void awaitMessage() {
+    void awaitMessage() { // check if we can check only if its null ?? OR possible not to check this because we use this in the other test every time
     }
 }

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+// need to check the get that get time, but all the other test use the regular get
 public class FutureTest {
 
     private Future<String> future;
@@ -24,6 +24,7 @@ public class FutureTest {
 
     @Test
     public void testResolve(){
+        assertFalse(future.isDone()); // rafael add because not yet resolved
         String str = "someResult";
         future.resolve(str);
         assertTrue(future.isDone());

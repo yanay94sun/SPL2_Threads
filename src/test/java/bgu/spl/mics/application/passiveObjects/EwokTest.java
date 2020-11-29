@@ -7,9 +7,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EwokTest {
+    private Ewok ewok;
 
     @BeforeEach
     void setUp() {
+        ewok = new Ewok();
     }
 
     @AfterEach

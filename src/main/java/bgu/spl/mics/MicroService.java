@@ -19,13 +19,14 @@ package bgu.spl.mics;
  * <p>
  */
 public abstract class MicroService implements Runnable { 
-    
+    protected MessageBusImpl messageBus; // tells in the office hours 1
 
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
      *             does not have to be unique)
      */
     public MicroService(String name) {
+        messageBus = new MessageBusImpl();
     	
     }
 
@@ -115,7 +116,7 @@ public abstract class MicroService implements Runnable {
      * @param result The result to resolve the relevant Future object.
      *               {@code e}.
      */
-    protected final <T> void complete(Event<T> e, T result) {
+    protected final <T> void complete(Event<T> e, T result) { // according to the office hour1 the parm T is bool and it tells about the situation of the event, true or false
     	
     }
 
@@ -146,7 +147,7 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
-    	
+
     }
 
 }
