@@ -14,7 +14,7 @@ public class MessageBusImpl implements MessageBus {
 
 	public static MessageBusImpl getInstance() {
 		return messageBus;
-	} // read online that should be getInstance in singelton /\/\
+	} // /\/\ read online that should be getInstance in singelton
 	
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {

@@ -38,6 +38,6 @@ public class FutureTest {
         String s = future.get(1000, TimeUnit.MILLISECONDS);
         long after = System.currentTimeMillis();
         long res = after - curr;
-        assert (1000 <= res);
+        assert (res <= 1000); //????????????????
     }
 }
