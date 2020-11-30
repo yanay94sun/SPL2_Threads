@@ -92,8 +92,7 @@ public abstract class MicroService implements Runnable {
      * 	       			null in case no micro-service has subscribed to {@code e.getClass()}.
      */
     protected final <T> Future<T> sendEvent(Event<T> e) {
-    	
-        return null; 
+        return messageBus.sendEvent(e); //the main func implement in the messagebus.sendEvent
     }
 
     /**
@@ -147,6 +146,7 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
+        messageBus.register(this);
 
     }
 
