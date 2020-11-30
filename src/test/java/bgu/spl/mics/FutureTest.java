@@ -30,4 +30,14 @@ public class FutureTest {
         assertTrue(future.isDone());
         assertTrue(str.equals(future.get()));
     }
+
+    @Test
+    public void getTime(){
+        future.resolve("someResult");
+        long curr = System.currentTimeMillis();
+        String s = future.get(1000, TimeUnit.MILLISECONDS);
+        long after = System.currentTimeMillis();
+        long res = after - curr;
+        assert (1000 <= res);
+    }
 }

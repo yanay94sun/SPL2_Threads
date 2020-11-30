@@ -12,7 +12,7 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
 
     @BeforeEach
     void setUp() {
-        messageBus = new MessageBusImpl();
+        messageBus = MessageBusImpl.getInstance();  // read online that should be getInstance in singelton /\/\
     }
 
     @AfterEach
