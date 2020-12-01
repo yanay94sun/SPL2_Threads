@@ -12,8 +12,7 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
     private SimpleMicroService simpleMicroServiceA;
     private SimpleMicroService simpleMicroServiceB;
     private ExampleBroadcast exampleBroadcast;
-    private ExampleEvent exampleEventA;
-    private ExampleEvent exampleEventB;
+    private ExampleEvent exampleEvent;
 
 
 
@@ -23,30 +22,58 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
             simpleMicroServiceA = new SimpleMicroService();
             simpleMicroServiceB = new SimpleMicroService();
             exampleBroadcast = new ExampleBroadcast("A");
-            exampleEventA = new ExampleEvent("A");
-            exampleEventB = new ExampleEvent("B");
+            exampleEvent = new ExampleEvent("A");
 
 
-
+        messageBus.register(simpleMicroServiceA);
+        messageBus.register(simpleMicroServiceB);
+            simpleMicroServiceA.initialize();
             simpleMicroServiceB.initialize();
-            Future<String> future = simpleMicroServiceA.sendEvent(exampleEventA);
+            Future<String> future = simpleMicroServiceA.sendEvent(exampleEvent);
             ExampleEvent event = null;
             try {
                 event = (ExampleEvent) messageBus.awaitMessage(simpleMicroServiceB);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // return null ?????????????
             }
-
-
+            simpleMicroServiceB.complete(event, "OK");
 
     }
 
     @AfterEach
     void tearDown() {
     }
-
+    /**
+     * we test all the other methods here:
+     * register/unregister - we register the microservices and check the finale result
+        then we check when unregistered if the results change
+     * subscribes - Tested in the initialize method
+     * send E/BC - Tested as part of running the program when {@code simpleMicroServiceA} send
+        a E/BC we check if {@code simpleMicroServiceB} got the message
+     * awaitMessage - we check if  we get message from the queue if there is one available,
+        if there isn't we ????????? return null  ??????
+      */
     @Test
     void complete() { // need to add "test" in the start of the name of the function????? ALL
+        messageBus.register(simpleMicroServiceA);
+        messageBus.register(simpleMicroServiceB);
+        simpleMicroServiceA.initialize();
+        simpleMicroServiceB.initialize();
+
+
+        Future<String> future = simpleMicroServiceA.sendEvent(exampleEvent);
+        ExampleEvent event = null;
+        try {
+            event = (ExampleEvent) messageBus.awaitMessage(simpleMicroServiceB);
+        } catch (InterruptedException e) {
+            e.printStackTrace(); // return null ?????????????
+        }
+        simpleMicroServiceB.complete(event, "OK");
+
+        assertSame("OK", future.get());
+
+        messageBus.unregister(simpleMicroServiceA);
+        assertNotSame("OK", future.get());
     }
 
     @Test

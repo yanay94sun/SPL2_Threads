@@ -11,7 +11,6 @@ public class SimpleMicroService extends MicroService {
 
     @Override
     protected void initialize() {
-        messageBus.register(this);
         subscribeBroadcast(ExampleBroadcast.class, message -> {});
         subscribeEvent(ExampleEvent.class, message -> {});
 
