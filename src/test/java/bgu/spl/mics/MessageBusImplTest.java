@@ -24,32 +24,18 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
             exampleBroadcast = new ExampleBroadcast("A");
             exampleEvent = new ExampleEvent("A");
 
-
-//        messageBus.register(simpleMicroServiceA);
-//        messageBus.register(simpleMicroServiceB);
-//            simpleMicroServiceA.initialize();
-//            simpleMicroServiceB.initialize();
-//            Future<String> future = simpleMicroServiceA.sendEvent(exampleEvent);
-//            ExampleEvent event = null;
-//            try {
-//                event = (ExampleEvent) messageBus.awaitMessage(simpleMicroServiceB);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace(); // return null ?????????????
-//            }
-//            simpleMicroServiceB.complete(event, "OK");
-
     }
 
     @AfterEach
     void tearDown() {
     }
     /**
-     * we test all the other methods here:
+     * we test all the other methods here, except the broadcasts:
      * register/unregister - we register the microservices and check the finale result
         then we check when unregistered if the results change
      * subscribes - Tested in the initialize method
-     * send E/BC - Tested as part of running the program when {@code simpleMicroServiceA} send
-        a E/BC we check if {@code simpleMicroServiceB} got the message
+     * send Event - Tested as part of running the program when {@code simpleMicroServiceA} send
+        a Event we check if {@code simpleMicroServiceB} got the message
      * awaitMessage - we check if  we get message from the queue if there is one available,
         if there isn't we ????????? return null  ??????
       */
@@ -100,6 +86,33 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
 //
 //        messageBus.unregister(simpleMicroServiceB);
 
+    }
+
+    /**
+     * we test here the broadcasts methods:
+        the other methods are also check in the TestComplete method.
+     * we test if {@code simpleMicroServiceA} send a broadcast, {@code simpleMicroServiceB}
+        will get the broadcast by checking the name of the broadcast are the same.
+     */
+    @Test
+    void sendBroadcast(){
+        messageBus.register(simpleMicroServiceA);
+        messageBus.register(simpleMicroServiceB);
+        simpleMicroServiceA.initialize();
+        simpleMicroServiceB.initialize();
+
+        simpleMicroServiceA.sendBroadcast(exampleBroadcast);
+        ExampleBroadcast broadcast = null;
+        try {
+            broadcast = (ExampleBroadcast) messageBus.awaitMessage(simpleMicroServiceB);
+        } catch (InterruptedException e) {
+            e.printStackTrace(); // return null ?????????????
+        }
+        assert broadcast != null;
+        assertSame("A", broadcast.getSenderName());
+
+        messageBus.unregister(simpleMicroServiceA);
+        messageBus.unregister(simpleMicroServiceB);
     }
 
 }
