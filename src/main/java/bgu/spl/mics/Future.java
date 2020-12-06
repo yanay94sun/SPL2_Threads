@@ -18,7 +18,8 @@ public class Future<T> {
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
-		
+		isDone=false;
+		result=null;
 	}
 	
 	/**
@@ -30,14 +31,28 @@ public class Future<T> {
      * 	       
      */
 	public T get() {
-		
-        return null; 
+		synchronized (this) {
+			while (!isDone) {
+				try {
+					wait();
+				}
+				catch (Exception e) { // maybe here InterruptedException.. see next practice
+
+				}
+			}
+			return result;
+		}
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
 	public void resolve (T result) {
+		this.result=result;
+		isDone=true;
+		synchronized (this) { // why synchronized before notifyAll?? mybe because we need evrybody to wakeup now
+			notifyAll();
+		}
 		
 	}
 	
@@ -45,7 +60,7 @@ public class Future<T> {
      * @return true if this object has been resolved, false otherwise
      */
 	public boolean isDone() {
-		return true;
+		return isDone;
 	}
 	
 	/**
@@ -60,8 +75,18 @@ public class Future<T> {
      *         elapsed, return null.
      */
 	public T get(long timeout, TimeUnit unit) { //As part of the work one does not have to implement this get that gets time
-		
-        return null;
+		synchronized (this) {
+			if (!isDone()) {
+				try {
+					unit.timedWait(this,timeout);
+				}
+				catch (InterruptedException ignored) {
+
+				}
+			}
+			return result;
+		}
+
 	}
 
 }
