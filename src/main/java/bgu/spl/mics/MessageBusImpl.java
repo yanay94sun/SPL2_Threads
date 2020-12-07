@@ -1,6 +1,7 @@
 package bgu.spl.mics;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -18,29 +19,39 @@ public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<Class<? extends Message>, ConcurrentLinkedQueue<MicroService>> messages;
 
 	public MessageBusImpl(){
-		futures= new ConcurrentHashMap<>();
-		microServices = new ConcurrentHashMap<>();
-		messages = new ConcurrentHashMap<>();
+		futures= new ConcurrentHashMap<>(); // hashMap of futures that the key is the event and the value is the futures resolve
+		microServices = new ConcurrentHashMap<>(); // hashMap of microServices that the key is the microServices and the value is the his message queue
+		messages = new ConcurrentHashMap<>(); // hashMap of messages that the key is the ???messages??? and the value is the microServices subscribe to it
 	}
 
 	public static MessageBusImpl getInstance() {
 		return messageBus;
 	} // /\/\ read online that should be getInstance in singelton
 	
+	// if the type of the event already in the message's Map - we add the MicroService to the microServiceQ related to it
+	// if not - we create a new microServiceQ related to this type of event
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {
 		synchronized (type) {
 			if (!messages.containsKey(type)) {
-				ConcurrentLinkedQueue a = new ConcurrentLinkedQueue<MicroService>();
-				messages.put(type, a);
+				ConcurrentLinkedQueue microServiceQ = new ConcurrentLinkedQueue<MicroService>();
+				messages.put(type, microServiceQ);
 			}
 			messages.get(type).add(m);
 		}
 		
 	}
 
+	// same as subscribe event
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
+		synchronized (type) {
+			if (!messages.containsKey(type)) {
+				ConcurrentLinkedQueue microServiceQ = new ConcurrentLinkedQueue<MicroService>();
+				messages.put(type, microServiceQ);
+			}
+			messages.get(type).add(m);
+		}
 		
     }
 
@@ -57,8 +68,7 @@ public class MessageBusImpl implements MessageBus {
 	
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		
-        return null;
+		return null;
 	}
 
 	@Override
@@ -69,12 +79,24 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void unregister(MicroService m) {
+		synchronized (m) {
+			Set<Class<? extends Message>> removeMessageSet = messages.keySet();
+			for (Class message : removeMessageSet) { // removing all the microservices related to the message from messages
+				messages.get(message).remove(m);
+			}
+			Set<Event> eventSet = futures.keySet();
+			for (Event event : eventSet) { // resolving to null all the futures related to the event of the microservice
+				if (microServices.get(m).contains(futures.get(event))) {
+					futures.get(event).resolve(null);
+				}
+			}
+		}
+		microServices.remove(m);
 		
 	}
 
 	@Override
 	public Message awaitMessage(MicroService m) throws InterruptedException {
-		
-		return null;
+		return microServices.get(m).take(); // taking some event from the Q
 	}
 }
