@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MessageBusImplTest { // why not extends testCase????????????????????
+public class MessageBusImplTest {
     private MessageBus messageBus;
-    // maybe need to use annonimus class of micro service for the tests
     private SimpleMicroService simpleMicroServiceA;
     private SimpleMicroService simpleMicroServiceB;
     private ExampleBroadcast exampleBroadcast;
@@ -18,7 +17,7 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
 
     @BeforeEach
     void setUp() {
-            messageBus = MessageBusImpl.getInstance();  // read online that should be getInstance in singelton /\/\
+            messageBus = MessageBusImpl.getInstance();
             simpleMicroServiceA = new SimpleMicroService();
             simpleMicroServiceB = new SimpleMicroService();
             exampleBroadcast = new ExampleBroadcast("A");
@@ -40,7 +39,7 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
         if there isn't we ????????? return null  ??????
       */
     @Test
-    void complete() { // need to add "test" in the start of the name of the function????? ALL
+    void complete() {
         messageBus.register(simpleMicroServiceA);
         messageBus.register(simpleMicroServiceB);
         simpleMicroServiceA.initialize();
@@ -52,7 +51,7 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
         try {
             event = (ExampleEvent) messageBus.awaitMessage(simpleMicroServiceB);
         } catch (InterruptedException e) {
-            e.printStackTrace(); // return null ?????????????
+            e.printStackTrace();
         }
         simpleMicroServiceB.complete(event, "OK");
 
@@ -62,29 +61,6 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
         assertNotSame("OK", future.get());
 
         messageBus.unregister(simpleMicroServiceB);
-
-//        // test broadcast
-//        messageBus.register(simpleMicroServiceA);
-//        messageBus.register(simpleMicroServiceB);
-//        simpleMicroServiceA.initialize();
-//        simpleMicroServiceB.initialize();
-//
-//        simpleMicroServiceA.sendBroadcast(exampleBroadcast);
-//        ExampleBroadcast broadcast = null;
-//        try {
-//            broadcast = (ExampleBroadcast) messageBus.awaitMessage(simpleMicroServiceB);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace(); // return null ?????????????
-//        }
-//
-//        simpleMicroServiceB.complete(broadcast, "OK");
-//
-//        assertSame("OK", future.get());
-//
-//        messageBus.unregister(simpleMicroServiceA);
-//        assertNotSame("OK", future.get());
-//
-//        messageBus.unregister(simpleMicroServiceB);
 
     }
 
@@ -106,7 +82,7 @@ public class MessageBusImplTest { // why not extends testCase???????????????????
         try {
             broadcast = (ExampleBroadcast) messageBus.awaitMessage(simpleMicroServiceB);
         } catch (InterruptedException e) {
-            e.printStackTrace(); // return null ?????????????
+            e.printStackTrace();
         }
         assert broadcast != null;
         assertSame("A", broadcast.getSenderName());

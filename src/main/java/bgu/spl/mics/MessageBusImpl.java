@@ -13,12 +13,12 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Only private fields and methods can be added to this class.
  */
 public class MessageBusImpl implements MessageBus {
-	private static MessageBusImpl messageBus = new MessageBusImpl(); // read online that should be getInstance in singelton /\/\
+	private final static MessageBusImpl messageBus = new MessageBusImpl(); // read online that should be getInstance in singelton /\/\
 	private ConcurrentHashMap<Event,Future> futures; // /\/\ meybe we need to change here all to Map and not ConcurrentHashMap
 	private ConcurrentHashMap<MicroService, BlockingDeque<Message>> microServices; // /\/\ meybe here just a regular Q
 	private ConcurrentHashMap<Class<? extends Message>, ConcurrentLinkedQueue<MicroService>> messages;
 
-	public MessageBusImpl(){
+	private MessageBusImpl(){
 		futures= new ConcurrentHashMap<>(); // hashMap of futures that the key is the event and the value is the futures resolve
 		microServices = new ConcurrentHashMap<>(); // hashMap of microServices that the key is the microServices and the value is the his message queue
 		messages = new ConcurrentHashMap<>(); // hashMap of messages that the key is the ???messages??? and the value is the microServices subscribe to it
