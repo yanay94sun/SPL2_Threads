@@ -1,6 +1,5 @@
 package bgu.spl.mics;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +12,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Only private fields and methods can be added to this class.
  */
 public class MessageBusImpl implements MessageBus {
-	private final static MessageBusImpl messageBus = new MessageBusImpl(); // read online that should be getInstance in singelton /\/\
+	private final static MessageBusImpl instance = new MessageBusImpl(); // read online that should be getInstance in singelton /\/\
 	private ConcurrentHashMap<Event,Future> futures; // /\/\ meybe we need to change here all to Map and not ConcurrentHashMap
 	private ConcurrentHashMap<MicroService, BlockingDeque<Message>> microServices; // /\/\ meybe here just a regular Q
 	private ConcurrentHashMap<Class<? extends Message>, ConcurrentLinkedQueue<MicroService>> messages;
@@ -25,7 +24,7 @@ public class MessageBusImpl implements MessageBus {
 	}
 
 	public static MessageBusImpl getInstance() {
-		return messageBus;
+		return instance;
 	} // /\/\ read online that should be getInstance in singelton
 	
 	// if the type of the event already in the message's Map - we add the MicroService to the microServiceQ related to it
