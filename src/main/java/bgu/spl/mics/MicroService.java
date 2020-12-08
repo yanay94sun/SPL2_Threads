@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import bgu.spl.mics.application.ThreadCounter;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,8 +27,8 @@ public abstract class MicroService implements Runnable {
     protected MessageBusImpl messageBus; // tells in the office hours 1
     private Map<Class<? extends Message>,Callback> messageCallbacks;
     private final String name;
-
     private boolean terminated = false;
+    private ThreadCounter threadCounter;
 
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
@@ -36,6 +38,7 @@ public abstract class MicroService implements Runnable {
         messageBus = MessageBusImpl.getInstance();
         this.name = name;
         messageCallbacks = new ConcurrentHashMap<>();
+        threadCounter = ThreadCounter.getInstance();
 
 
     	
@@ -117,7 +120,7 @@ public abstract class MicroService implements Runnable {
      * @param b The broadcast message to send
      */
     protected final void sendBroadcast(Broadcast b) {
-
+        messageBus.sendBroadcast(b);
     }
 
     /**
@@ -164,8 +167,18 @@ public abstract class MicroService implements Runnable {
     public final void run() {
         messageBus.register(this);
         initialize();
-
-
+        threadCounter.increase();
+        while (!terminated) {
+            try {
+                Message m = messageBus.awaitMessage(this);
+                Callback c = messageCallbacks.get(m.getClass());
+                if (c!=null)
+                    c.call(m);
+            } catch (InterruptedException e) {
+                terminated=true;
+                messageBus.unregister(this);
+            }
+        }
     }
 
 }
