@@ -164,7 +164,7 @@ public abstract class MicroService implements Runnable {
      * otherwise you will end up in an infinite loop.
      */
     @Override
-    public final void run() {
+    public final void run() { //why no doing it in initialize??? 
         messageBus.register(this);
         initialize();
         threadCounter.increase();
