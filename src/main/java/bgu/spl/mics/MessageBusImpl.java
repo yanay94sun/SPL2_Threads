@@ -60,14 +60,38 @@ public class MessageBusImpl implements MessageBus {
 		futures.get(e).resolve(result); // /\/\
 	}
 
+	//sends broadcast to *all* the e Microservices that are interested in it.
 	@Override
 	public void sendBroadcast(Broadcast b) {
-		
+		synchronized (b.getClass()){
+//			messages.get(b.getClass()).forEach();
+//			Set<MicroService> microServiceSet = microServices.keySet();
+
+			//			for (MicroService microService : messages.get(b.getClass()))
+			for (MicroService microService : messages.get(b.getClass())) {
+				if (microServices.containsKey(microService))
+					microServices.get(microService.getClass()).add(b);
+			}
+		}
 	}
 
-	
+	//send event to *one* of the Microservices that are interested in it. (round robin)
 	@Override
-	public <T> Future<T> sendEvent(Event<T> e) {
+	public <T> Future<T> sendEvent(Event<T> e) { // not full anderstand this method implement by /\/\
+		if (messages.containsKey(e.getClass())) {
+			Future<T> future = new Future<>();
+			futures.put(e, future);
+			if (messages.get(e.getClass()) != null) { // check if the microservice Q is empty
+				synchronized (e.getClass()) {
+					MicroService m = messages.get(e.getClass()).poll();// remove and returns the head for the round rubin
+					if (m != null) { // check if the microservice is alive
+						microServices.get(m).add(e);
+						messages.get(e.getClass()).add(m);
+					}
+				}
+				return future;
+			}
+		}
 		return null;
 	}
 
