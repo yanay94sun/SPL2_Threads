@@ -63,6 +63,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
+        messageBus.subscribeEvent(type, this);
+        messageCallbacks.put(type, callback);
     	
     }
 
@@ -87,6 +89,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
+        messageBus.subscribeBroadcast(type, this);
+        messageCallbacks.put(type, callback);
     	
     }
 
@@ -113,7 +117,7 @@ public abstract class MicroService implements Runnable {
      * @param b The broadcast message to send
      */
     protected final void sendBroadcast(Broadcast b) {
-    	
+
     }
 
     /**
@@ -127,7 +131,7 @@ public abstract class MicroService implements Runnable {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) { // according to the office hour1 the parm T is bool and it tells about the situation of the event, true or false
-    	
+    	messageBus.complete(e, result);
     }
 
     /**
@@ -140,7 +144,8 @@ public abstract class MicroService implements Runnable {
      * message.
      */
     protected final void terminate() {
-    	
+    	this.terminated = true;
+    	Thread.currentThread().interrupt();
     }
 
     /**
@@ -148,7 +153,7 @@ public abstract class MicroService implements Runnable {
      *         construction time and is used mainly for debugging purposes.
      */
     public final String getName() {
-        return null;
+        return name;
     }
 
     /**
@@ -158,6 +163,8 @@ public abstract class MicroService implements Runnable {
     @Override
     public final void run() {
         messageBus.register(this);
+        initialize();
+
 
     }
 
