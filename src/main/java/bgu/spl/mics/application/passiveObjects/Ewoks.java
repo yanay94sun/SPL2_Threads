@@ -10,5 +10,5 @@ package bgu.spl.mics.application.passiveObjects;
  * You can add ONLY private methods and fields to this class.
  */
 public class Ewoks {
-
+//NEED TO BE SINGELTON!!
 }

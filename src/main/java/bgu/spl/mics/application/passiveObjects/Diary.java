@@ -8,5 +8,7 @@ package bgu.spl.mics.application.passiveObjects;
  * Do not add to this class nothing but a single constructor, getters and setters.
  */
 public class Diary {
+//NEED TO BE SINGELTON!!
 
+    //field TotalAttack should be atomic!
 }
