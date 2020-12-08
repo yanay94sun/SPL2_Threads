@@ -1,6 +1,8 @@
 package bgu.spl.mics.application.services;
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.messages.AttackEvent;
+import bgu.spl.mics.application.messages.DeactivationEvent;
 
 /**
  * R2D2Microservices is in charge of the handling {@link DeactivationEvent}.
@@ -18,6 +20,7 @@ public class R2D2Microservice extends MicroService {
 
     @Override
     protected void initialize() {
-
+        messageBus.subscribeEvent(DeactivationEvent.class,  this);
+        //need to subscribe brodcasts ass well
     }
 }

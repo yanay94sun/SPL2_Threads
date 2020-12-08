@@ -141,6 +141,7 @@ public abstract class MicroService implements Runnable {
      * this method is called once when the event loop starts.
      */
     protected abstract void initialize();
+    //initialize is diffrence in each microservice and each microservice need in his initialize method to subsribe to specif type of event.
 
     /**
      * Signals the event loop that it must terminate after handling the current
@@ -164,7 +165,7 @@ public abstract class MicroService implements Runnable {
      * otherwise you will end up in an infinite loop.
      */
     @Override
-    public final void run() { //why no doing it in initialize??? 
+    public final void run() {
         messageBus.register(this);
         initialize();
         threadCounter.increase();
