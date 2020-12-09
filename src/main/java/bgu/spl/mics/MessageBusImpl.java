@@ -18,7 +18,7 @@ public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<MicroService, BlockingDeque<Message>> microServices; // /\/\ meybe here just a regular Q
 	private ConcurrentHashMap<Class<? extends Message>, ConcurrentLinkedQueue<MicroService>> messages;
 
-	public MessageBusImpl(){
+	private MessageBusImpl(){
 		futures= new ConcurrentHashMap<>(); // hashMap of futures that the key is the event and the value is the futures resolve
 		microServices = new ConcurrentHashMap<>(); // hashMap of microServices that the key is the microServices and the value is the his message queue
 		messages = new ConcurrentHashMap<>(); // hashMap of messages that the key is the ???messages??? and the value is the microServices subscribe to it

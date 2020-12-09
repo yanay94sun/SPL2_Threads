@@ -20,7 +20,14 @@ public class R2D2Microservice extends MicroService {
 
     @Override
     protected void initialize() {
-        messageBus.subscribeEvent(DeactivationEvent.class,  this);
-        //need to subscribe brodcasts ass well
+        System.out.println("a");
     }
+//
+////        subscribeBroadcast();
+////        subscribeEvent(DeactivationEvent.class,  this);
+////        //need to subscribe brodcasts ass well
+////    }
+//
+//
+//
 }

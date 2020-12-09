@@ -79,8 +79,8 @@ public class Future<T> {
 			if (!isDone()) {
 				try {
 					unit.timedWait(this,timeout);
-				}
-				catch (InterruptedException ignored) {
+				} // ASK AVITAL ABOUT HANDELING InterruptedException, maybe just signture of throw InterruptedException Or ignore??
+				catch (InterruptedException e) {
 
 				}
 			}
