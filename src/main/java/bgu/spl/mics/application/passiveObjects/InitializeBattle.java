@@ -37,6 +37,8 @@ public class InitializeBattle {
         JsonObject Ewoks = battle.getAsJsonObject("Ewoks");
 
 
+
+
 //
 //        //creates the inventory
 //        Inventory.getInstance().load(addToInventory(inventory));
