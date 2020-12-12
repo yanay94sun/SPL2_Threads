@@ -169,6 +169,8 @@ public abstract class MicroService implements Runnable {
         messageBus.register(this);
         initialize();
         threadCounter.increase();
+//        System.out.println(threadCounter.getCount());
+
         while (!terminated) {
             try {
                 Message m = messageBus.awaitMessage(this);

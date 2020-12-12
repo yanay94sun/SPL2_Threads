@@ -26,28 +26,35 @@ public class HanSoloMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-        System.out.println(getName());
+//        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             this.terminate();
         });
-
+        System.out.println(this.getName() + " start acquire ewoks: ");
         this.subscribeEvent(AttackEvent.class, message ->{
             boolean available = ewoks.getEwoks(message.getSerial()); // wait to be true
-
             if (available){
                 try {
                     Thread.sleep(message.getDuration());
+                    System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + message.getDuration() + " ms");
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                System.out.println(message.getSerial());
+                ewoks.releaseEwoks(message.getSerial());
                 complete(message, true);
+                System.out.println(this.getName() + " Complete is mission and released the ewoks!");
             }
             else {
+                System.out.println("NOT AVAILABLE");
                 complete(message, false);
             }
+
         });
 
 
+        System.out.println(this.getName() + " initialize successfully!");
 
     }
 }

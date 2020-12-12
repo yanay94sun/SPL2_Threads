@@ -23,7 +23,7 @@ public class R2D2Microservice extends MicroService {
 
     @Override
     protected void initialize() {
-        System.out.println(getName());
+//        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             this.terminate();
         });
@@ -36,6 +36,7 @@ public class R2D2Microservice extends MicroService {
             this.complete(message, true); // check if the result is type boolean ?????????????????
         });
 
+        System.out.println(this.getName() + " initialize successfully!");
 
     }
 

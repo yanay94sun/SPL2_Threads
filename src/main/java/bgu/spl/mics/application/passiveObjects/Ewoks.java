@@ -50,6 +50,7 @@ public class Ewoks {
         for (Integer serialNumber : serialNumbers) {
             Ewok a = ewoks.get(serialNumber);
             a.acquire();
+            System.out.println("acquired ewok ID: " + a.serialNumber);
         }
         return true;
     }

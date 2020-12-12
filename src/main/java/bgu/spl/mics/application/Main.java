@@ -65,8 +65,8 @@ public class Main {
 		serials1.add(2);
 
 		List<Integer> serials2 = new ArrayList<>();
-		serials2.add(2);
 		serials2.add(1);
+		serials2.add(2);
 
 		Attack attack1_test = new Attack(serials1, 1000);
 		Attack attack2_test = new Attack(serials2, 1000);

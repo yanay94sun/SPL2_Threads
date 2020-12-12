@@ -26,7 +26,7 @@ public class Ewok {
      * Acquires an Ewok
      */
     public void acquire() {
-        System.out.println(this.getSerialNumber());
+//        System.out.println(this.getSerialNumber());
         try {
             sem.acquire();
         }
