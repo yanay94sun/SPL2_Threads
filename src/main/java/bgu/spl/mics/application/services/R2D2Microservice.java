@@ -3,6 +3,7 @@ package bgu.spl.mics.application.services;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.DeactivationEvent;
+import bgu.spl.mics.application.messages.TerminateBroadCast;
 
 /**
  * R2D2Microservices is in charge of the handling {@link DeactivationEvent}.
@@ -13,21 +14,28 @@ import bgu.spl.mics.application.messages.DeactivationEvent;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class R2D2Microservice extends MicroService {
+    long duration;
 
     public R2D2Microservice(long duration) {
         super("R2D2");
+        this.duration = duration;
     }
 
     @Override
     protected void initialize() {
-        System.out.println("a");
+        this.subscribeBroadcast(TerminateBroadCast.class, message -> {
+            this.terminate();
+        });
+        this.subscribeEvent(DeactivationEvent.class, message -> {
+            try {
+                Thread.sleep(duration);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.complete(message, true); // check if the result is type boolean ?????????????????
+        });
+
+
     }
-//
-////        subscribeBroadcast();
-////        subscribeEvent(DeactivationEvent.class,  this);
-////        //need to subscribe brodcasts ass well
-////    }
-//
-//
-//
+
 }

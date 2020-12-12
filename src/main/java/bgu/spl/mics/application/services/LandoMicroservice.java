@@ -1,7 +1,9 @@
 package bgu.spl.mics.application.services;
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.messages.DeactivationEvent;
 import bgu.spl.mics.application.messages.TerminateBroadCast;
+import bgu.spl.mics.application.messages.BombDestroyerEvent;
 
 /**
  * LandoMicroservice
@@ -9,15 +11,26 @@ import bgu.spl.mics.application.messages.TerminateBroadCast;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class LandoMicroservice  extends MicroService {
+    long duration;
 
     public LandoMicroservice(long duration) {
         super("Lando");
+        this.duration = duration;
     }
 
     @Override
     protected void initialize() {
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
-            this.terminate(); // need to terminate itself????????????
+            this.terminate();
+        });
+
+        this.subscribeEvent(BombDestroyerEvent.class, message -> {
+            try {
+                Thread.sleep(duration);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.complete(message, true); // check if the result is type boolean ?????????????????
         });
 
 

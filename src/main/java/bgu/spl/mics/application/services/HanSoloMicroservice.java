@@ -31,7 +31,7 @@ public class HanSoloMicroservice extends MicroService {
         });
 
         this.subscribeEvent(AttackEvent.class, message ->{
-            boolean available = ewoks.getEwoks(message.getSerial());
+            boolean available = ewoks.getEwoks(message.getSerial()); // wait to be true
 
             if (available){
                 try {
@@ -39,13 +39,11 @@ public class HanSoloMicroservice extends MicroService {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                complete(message, true);
             }
-
-
-
-
-
-
+            else {
+                complete(message, false);
+            }
         });
 
 

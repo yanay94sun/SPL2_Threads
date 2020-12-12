@@ -4,6 +4,7 @@ import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.BombDestroyerEvent;
 import bgu.spl.mics.application.messages.TerminateBroadCast;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 
 /**
@@ -15,9 +16,11 @@ import bgu.spl.mics.application.messages.TerminateBroadCast;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class C3POMicroservice extends MicroService {
+    private Ewoks ewoks;
 
     public C3POMicroservice() {
         super("C3PO");
+        this.ewoks = Ewoks.getInstance();
     }
 
     @Override
@@ -28,8 +31,20 @@ public class C3POMicroservice extends MicroService {
 
 
         subscribeEvent(AttackEvent.class, message->{
-            //Lamda Callback
 
+            boolean available = ewoks.getEwoks(message.getSerial()); // wait to be true
+
+            if (available){
+                try {
+                    Thread.sleep(message.getDuration());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                complete(message, true);
+            }
+            else {
+                complete(message, false);
+            }
         }
         );
     }
