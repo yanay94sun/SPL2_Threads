@@ -41,17 +41,17 @@ public class LeiaMicroservice extends MicroService {
         while (!futureQueue.isEmpty()){
             futureQueue.pop().get(); // TODO: this get or getTime????
         }
-
+        // after all the attack events are completed, we send event to R2D2
         this.sendEvent(new DeactivationEvent()).get();
-
+        // after R2D2 completed is task, we send event to Lando
         this.sendEvent(new BombDestroyerEvent()).get();
-
+        // after the battle is done, we send broadcast to terminate
         this.sendBroadcast(new TerminateBroadCast());
 
     }
 
 
-    public void
+
 
 
     @Override

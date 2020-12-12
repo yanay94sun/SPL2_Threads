@@ -5,6 +5,7 @@ import bgu.spl.mics.Broadcast;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadCast;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 /**
  * HanSoloMicroservices is in charge of the handling {@link AttackEvent}.
@@ -15,9 +16,11 @@ import bgu.spl.mics.application.messages.TerminateBroadCast;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class HanSoloMicroservice extends MicroService {
+    private Ewoks ewoks;
 
     public HanSoloMicroservice() {
         super("Han");
+        this.ewoks = Ewoks.getInstance();
     }
 
 
@@ -25,6 +28,24 @@ public class HanSoloMicroservice extends MicroService {
     protected void initialize() {
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             this.terminate();
+        });
+
+        this.subscribeEvent(AttackEvent.class, message ->{
+            boolean available = ewoks.getEwoks(message.getSerial());
+
+            if (available){
+                try {
+                    Thread.sleep(message.getDuration());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+
+
         });
 
 
