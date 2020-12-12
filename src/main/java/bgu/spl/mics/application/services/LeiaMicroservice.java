@@ -32,6 +32,11 @@ public class LeiaMicroservice extends MicroService {
 
     public void makeFutureQueue(){
         // making attacks events
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (Attack attack : attacks) {
              futureQueue.add(this.sendEvent(new AttackEvent(attack))); // WHAT ABOUT THE FUTURES !!??????
         }
@@ -40,6 +45,7 @@ public class LeiaMicroservice extends MicroService {
     public void checkFutures(){
         while (!futureQueue.isEmpty()){
             futureQueue.pop().get(); // TODO: this get or getTime????
+            System.out.println(futureQueue.get(0).isDone());
         }
         // after all the attack events are completed, we send event to R2D2
         this.sendEvent(new DeactivationEvent()).get();
@@ -56,20 +62,15 @@ public class LeiaMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
+        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             this.terminate();
+
         });
 
+        makeFutureQueue();
 
+        checkFutures();
 
-
-
-
-
-
-
-
-
-    	
     }
 }

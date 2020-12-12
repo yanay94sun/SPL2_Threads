@@ -68,6 +68,7 @@ public class MessageBusImpl implements MessageBus {
 //			Set<MicroService> microServiceSet = microServices.keySet();
 
 			//			for (MicroService microService : messages.get(b.getClass()))
+			System.out.println("broadcast send");
 			for (MicroService microService : messages.get(b.getClass())) {
 				if (microServices.containsKey(microService))
 					microServices.get(microService.getClass()).add(b);
@@ -78,6 +79,7 @@ public class MessageBusImpl implements MessageBus {
 	//send event to *one* of the Microservices that are interested in it. (round robin)
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) { // not full anderstand this method implement by /\/\
+		System.out.println(e.getClass());
 		if (messages.containsKey(e.getClass())) {
 			Future<T> future = new Future<>();
 			futures.put(e, future);

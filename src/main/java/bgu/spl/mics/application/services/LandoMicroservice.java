@@ -20,6 +20,7 @@ public class LandoMicroservice  extends MicroService {
 
     @Override
     protected void initialize() {
+        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             this.terminate();
         });

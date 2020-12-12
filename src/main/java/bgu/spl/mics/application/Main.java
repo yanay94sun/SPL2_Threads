@@ -90,18 +90,17 @@ public class Main {
 
 
 		t1.start();
-		leia.makeFutureQueue();
 		t2.start();
 		t3.start();
 		t4.start();
 		t5.start();
 
+//		leia.makeFutureQueue();
+//		leia.checkFutures();
 
-		leia.checkFutures();
-
-		for (int i = 0 ; i < 100000 ; i++){
-			System.out.println(tc.getCount());
-		}
+//		for (int i = 0 ; i < 100000 ; i++){
+//			System.out.println(tc.getCount());
+//		}
 
 
 	}
