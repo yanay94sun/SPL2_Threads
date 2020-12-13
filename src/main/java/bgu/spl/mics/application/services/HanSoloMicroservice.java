@@ -5,6 +5,7 @@ import bgu.spl.mics.Broadcast;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadCast;
+import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 /**
@@ -17,32 +18,35 @@ import bgu.spl.mics.application.passiveObjects.Ewoks;
  */
 public class HanSoloMicroservice extends MicroService {
     private Ewoks ewoks;
+    private Diary diary;
 
     public HanSoloMicroservice() {
         super("Han");
         this.ewoks = Ewoks.getInstance();
+        this.diary = Diary.getInstance();
     }
 
 
     @Override
     protected void initialize() {
-        System.out.println(getName());
+        System.out.println(getName() + " starting initialize");
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             System.out.println(this.getName() + " Is terminate");
+            this.diary.setHanSoloTerminate(System.currentTimeMillis());
             this.terminate();
         });
         System.out.println(this.getName() + " start acquire ewoks: ");
         this.subscribeEvent(AttackEvent.class, message ->{
+            System.out.println(message.getSerial() + " Ewoks for  " + this.getName());
             boolean available = ewoks.getEwoks(message.getSerial()); // wait to be true
             if (available){
                 try {
                     Thread.sleep(message.getDuration());
-                    System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + message.getDuration() + " ms");
-
+                    System.out.println("ZZZZZZZZZ... " + this.getName() + " was sleeping for " + message.getDuration() + " ms");
+                    this.diary.incrementTotalAttacks();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(message.getSerial());
                 ewoks.releaseEwoks(message.getSerial());
                 complete(message, true);
                 System.out.println(this.getName() + " Complete is mission and released the ewoks!");

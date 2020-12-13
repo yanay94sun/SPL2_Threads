@@ -11,10 +11,7 @@ import com.google.gson.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class InitializeBattle {
 
@@ -43,11 +40,14 @@ public class InitializeBattle {
         Attack[] attacksArr = generateAttacks(attacks);
         int r2d2Duration = generateDuration(r2d2Dur);
         int landoDuration = generateDuration(landoDur);
-        int numEwoksNeed = generateNumEwoks(ewoksNumNe);   //@TODO ------>  WHY WE DONT USE IT???
+        int numEwoksNeed = generateNumEwoks(ewoksNumNe);
 
+        // generate and load the Ewoks
+        Ewok[] ewokArr = addToEwoks(numEwoksNeed);
+        Ewoks.getInstance().load(ewokArr);
 
         //Creating the microServices.
-        ThreadCounter tc = ThreadCounter.getInstance();   //@TODO ------> need to change to AttackCounter (for diary)
+        ThreadCounter tc = ThreadCounter.getInstance();
         HanSoloMicroservice hanSolo = new HanSoloMicroservice();
         C3POMicroservice c3PO = new C3POMicroservice();
         LeiaMicroservice leia = new LeiaMicroservice(attacksArr);
@@ -62,12 +62,23 @@ public class InitializeBattle {
         Thread t5 = new Thread(landoMicroservice);
 
         //Starting the Threads.
-        t1.start();
+
         t2.start();
         t3.start();
         t4.start();
         t5.start();
+        t1.start();
 
+//        while (ThreadCounter.getInstance().getCount().get() != 4){
+//        }
+//        synchronized (this){
+//            notifyAll();
+//        }
+
+        // calling leia methods
+        leia.makeFutureQueue();
+
+        leia.checkFutures();
 
         }
 
@@ -84,6 +95,7 @@ public class InitializeBattle {
             for (int j = 0; j < ewoksSerials.size(); j++) {
                 serials.add(ewoksSerials.get(j).getAsInt());
             }
+            Collections.sort(serials); // rafael add
             attacks_arr[i] = new Attack(serials, dur);
         }
         return attacks_arr;
@@ -97,6 +109,15 @@ public class InitializeBattle {
     // this Function is creating the number of ewoks need for the attack (we are not using it).
     public int generateNumEwoks (JsonPrimitive num){
         return num.getAsInt();
+    }
+
+    // this Function is adding ewoks to ewoks array (in order to load them to Ewoks)
+    public Ewok[] addToEwoks(int numEwoksNeed) {
+        Ewok[] ewokArr = new Ewok[numEwoksNeed];
+        for (int i = 0; i < numEwoksNeed; i++){
+            ewokArr[i] = new Ewok(i + 1);
+        }
+        return ewokArr;
     }
 
 

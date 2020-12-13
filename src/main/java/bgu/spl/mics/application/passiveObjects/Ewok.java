@@ -26,9 +26,10 @@ public class Ewok {
      * Acquires an Ewok
      */
     public void acquire() {
-        System.out.println(this.getSerialNumber());
+
         try {
             sem.acquire();
+            System.out.println("Ewok number: " + this.getSerialNumber() + " is acquire! by " + Thread.currentThread().getName());
         }
         catch (InterruptedException e1){
             System.out.println("ewok interrupted");

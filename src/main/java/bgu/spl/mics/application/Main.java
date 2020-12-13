@@ -27,7 +27,6 @@ public class Main {
 			InitializeBattle m = new InitializeBattle();
 			m.run(args[0]);
 //			m.outputFiles(args[1]);
-
 ////			InitializeBattle a = new InitializeBattle();
 //			//prase json
 //			BufferedReader buffer;
