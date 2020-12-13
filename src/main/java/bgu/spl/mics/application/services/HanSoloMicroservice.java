@@ -43,6 +43,7 @@ public class HanSoloMicroservice extends MicroService {
                 try {
                     Thread.sleep(message.getDuration());
                     System.out.println("ZZZZZZZZZ... " + this.getName() + " was sleeping for " + message.getDuration() + " ms");
+                    this.diary.setHanSoloFinish(System.currentTimeMillis());
                     this.diary.incrementTotalAttacks();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

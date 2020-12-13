@@ -120,6 +120,11 @@ public class InitializeBattle {
         return ewokArr;
     }
 
+    //writes the outputs to the given file names
+    public void outputFile (String diaryPath){
+        Diary.getInstance().printToFile(diaryPath);
+    }
+
 
 }
 
