@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import bgu.spl.mics.Future;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.passiveObjects.*; // rafael add
 import bgu.spl.mics.application.messages.*;
+import bgu.spl.mics.application.ThreadCounter;
 
 
 /**
@@ -22,21 +24,24 @@ import bgu.spl.mics.application.messages.*;
 public class LeiaMicroservice extends MicroService {
 	private Attack[] attacks;
 	private LinkedList<Future<Boolean>> futureQueue; // ?? check others futures ?????????????????????
+    private ThreadCounter threadCounter;
 
     public LeiaMicroservice(Attack[] attacks) {
         super("Leia");
+
 		this.attacks = attacks;
 		this.futureQueue = new LinkedList<>();
+        threadCounter = ThreadCounter.getInstance();
     }
 
 
     public void makeFutureQueue(){
         // making attacks events
-//        try {
-//            Thread.currentThread().wait();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(15);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (Attack attack : attacks) {
              futureQueue.add(this.sendEvent(new AttackEvent(attack))); // WHAT ABOUT THE FUTURES !!??????
         }
@@ -68,12 +73,12 @@ public class LeiaMicroservice extends MicroService {
             this.terminate();
 
         });
-
-
         makeFutureQueue();
 
         checkFutures();
         System.out.println(this.getName() + " initialize successfully!");
+
+
 
 
     }
