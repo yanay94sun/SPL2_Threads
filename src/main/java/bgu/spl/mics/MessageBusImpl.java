@@ -68,11 +68,13 @@ public class MessageBusImpl implements MessageBus {
 //			Set<MicroService> microServiceSet = microServices.keySet();
 
 			//			for (MicroService microService : messages.get(b.getClass()))
-			System.out.println("broadcast send");
+			System.out.println("broadcast sent");
 			for (MicroService microService : messages.get(b.getClass())) {
+				synchronized (microService){ //TODO think it not needed here. remove it!
 				if (microServices.containsKey(microService))
-					microServices.get(microService.getClass()).add(b);
-			}
+//					System.out.println("**************************************");
+					microServices.get(microService).add(b);
+			}}
 		}
 	}
 

@@ -32,11 +32,11 @@ public class LeiaMicroservice extends MicroService {
 
     public void makeFutureQueue(){
         // making attacks events
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.currentThread().wait();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         for (Attack attack : attacks) {
              futureQueue.add(this.sendEvent(new AttackEvent(attack))); // WHAT ABOUT THE FUTURES !!??????
         }
@@ -64,9 +64,11 @@ public class LeiaMicroservice extends MicroService {
     protected void initialize() {
 //        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
+            System.out.println(this.getName() + " Is terminate");
             this.terminate();
 
         });
+
 
         makeFutureQueue();
 

@@ -27,6 +27,7 @@ public class C3POMicroservice extends MicroService {
     protected void initialize() {
 //        System.out.println(getName());
         subscribeBroadcast(TerminateBroadCast.class, message->{
+            System.out.println(this.getName() + " Is terminate");
             this.terminate();
         });
 

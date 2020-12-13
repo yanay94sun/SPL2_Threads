@@ -22,12 +22,14 @@ public class LandoMicroservice  extends MicroService {
     protected void initialize() {
 //        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
+            System.out.println(this.getName() + " Is terminate");
             this.terminate();
         });
 
         this.subscribeEvent(BombDestroyerEvent.class, message -> {
             try {
                 Thread.sleep(duration);
+                System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + duration + " ms");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

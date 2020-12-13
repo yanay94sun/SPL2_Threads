@@ -28,6 +28,7 @@ public class HanSoloMicroservice extends MicroService {
     protected void initialize() {
 //        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
+            System.out.println(this.getName() + " Is terminate");
             this.terminate();
         });
         System.out.println(this.getName() + " start acquire ewoks: ");
