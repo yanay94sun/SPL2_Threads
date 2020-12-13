@@ -26,16 +26,16 @@ public class R2D2Microservice extends MicroService {
 
     @Override
     protected void initialize() {
-        System.out.println(getName() + " starting initialize");
+//        System.out.println(getName() + " starting initialize");
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
-            System.out.println(this.getName() + " Is terminate");
+//            System.out.println(this.getName() + " Is terminate");
             this.diary.setR2D2Terminate(System.currentTimeMillis());
             this.terminate();
         });
         this.subscribeEvent(DeactivationEvent.class, message -> {
             try {
                 Thread.sleep(duration);
-                System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + duration + " ms");
+//                System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + duration + " ms");
                 this.diary.setR2D2Deactivate(System.currentTimeMillis());
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -43,7 +43,7 @@ public class R2D2Microservice extends MicroService {
             this.complete(message, true); // check if the result is type boolean ?????????????????
         });
 
-        System.out.println(this.getName() + " initialize successfully!");
+//        System.out.println(this.getName() + " initialize successfully!");
 
     }
 

@@ -1,7 +1,5 @@
 package bgu.spl.mics;
 
-import bgu.spl.mics.application.ThreadCounter;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,7 +26,6 @@ public abstract class MicroService implements Runnable {
     private Map<Class<? extends Message>,Callback> messageCallbacks;
     private final String name;
     private boolean terminated = false;
-    private ThreadCounter threadCounter;
 
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
@@ -38,7 +35,6 @@ public abstract class MicroService implements Runnable {
         messageBus = MessageBusImpl.getInstance();
         this.name = name;
         messageCallbacks = new ConcurrentHashMap<>();
-        threadCounter = ThreadCounter.getInstance();
 
 
     	
@@ -168,7 +164,6 @@ public abstract class MicroService implements Runnable {
     public final void run() {
         messageBus.register(this);
         initialize();
-        threadCounter.increase();
 //        System.out.println(threadCounter.getCount());
 
         while (!terminated) {

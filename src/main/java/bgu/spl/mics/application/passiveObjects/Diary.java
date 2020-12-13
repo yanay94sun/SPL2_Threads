@@ -22,8 +22,48 @@ public class Diary {
     //field TotalAttack should be atomic!
 
     private static Diary instance=new Diary();
+
+    public AtomicInteger getNumberOfAttacks() {
+        return totalAttacks;
+    }
+
+    public void resetNumberAttacks(){
+        this.totalAttacks.set(0);
+    }
+
+    public long getHanSoloFinish() {
+        return HanSoloFinish;
+    }
+
+    public long getC3POFinish() {
+        return C3POFinish;
+    }
+
+    public long getR2D2Deactivate() {
+        return R2D2Deactivate;
+    }
+
+    public long getLeiaTerminate() {
+        return LeiaTerminate;
+    }
+
+    public long getHanSoloTerminate() {
+        return HanSoloTerminate;
+    }
+
+    public long getC3POTerminate() {
+        return C3POTerminate;
+    }
+
+    public long getR2D2Terminate() {
+        return R2D2Terminate;
+    }
+
+    public long getLandoTerminate() {
+        return LandoTerminate;
+    }
+
     private AtomicInteger totalAttacks;
-//    int totalAttacks;
     long HanSoloFinish;
     long C3POFinish;
     long R2D2Deactivate;

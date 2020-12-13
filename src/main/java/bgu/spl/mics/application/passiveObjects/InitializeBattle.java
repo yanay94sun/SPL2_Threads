@@ -1,8 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
 
-import bgu.spl.mics.MicroService;
-import bgu.spl.mics.application.ThreadCounter;
-
 import bgu.spl.mics.application.services.*;
 
 
@@ -10,7 +7,6 @@ import com.google.gson.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class InitializeBattle {
@@ -47,7 +43,6 @@ public class InitializeBattle {
         Ewoks.getInstance().load(ewokArr);
 
         //Creating the microServices.
-        ThreadCounter tc = ThreadCounter.getInstance();
         HanSoloMicroservice hanSolo = new HanSoloMicroservice();
         C3POMicroservice c3PO = new C3POMicroservice();
         LeiaMicroservice leia = new LeiaMicroservice(attacksArr);
@@ -69,11 +64,7 @@ public class InitializeBattle {
         t5.start();
         t1.start();
 
-//        while (ThreadCounter.getInstance().getCount().get() != 4){
-//        }
-//        synchronized (this){
-//            notifyAll();
-//        }
+
 
         // calling leia methods
         leia.makeFutureQueue();

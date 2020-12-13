@@ -29,10 +29,10 @@ public class Ewok {
 
         try {
             sem.acquire();
-            System.out.println("Ewok number: " + this.getSerialNumber() + " is acquire! by " + Thread.currentThread().getName());
+//            System.out.println("Ewok number: " + this.getSerialNumber() + " is acquire! by " + Thread.currentThread().getName());
         }
         catch (InterruptedException e1){
-            System.out.println("ewok interrupted");
+//            System.out.println("ewok interrupted");
         }
         available = false;
 

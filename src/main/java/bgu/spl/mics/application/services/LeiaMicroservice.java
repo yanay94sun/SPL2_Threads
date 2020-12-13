@@ -1,13 +1,11 @@
 package bgu.spl.mics.application.services;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import bgu.spl.mics.Future;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.passiveObjects.*; // rafael add
 import bgu.spl.mics.application.messages.*;
-import bgu.spl.mics.application.ThreadCounter;
 
 
 /**
@@ -21,7 +19,6 @@ import bgu.spl.mics.application.ThreadCounter;
 public class LeiaMicroservice extends MicroService {
 	private Attack[] attacks;
 	private LinkedList<Future<Boolean>> futureQueue; // ?? check others futures ?????????????????????
-    private ThreadCounter threadCounter;
     private Diary diary;
 
     public LeiaMicroservice(Attack[] attacks) {
@@ -29,7 +26,6 @@ public class LeiaMicroservice extends MicroService {
 
 		this.attacks = attacks;
 		this.futureQueue = new LinkedList<>();
-        threadCounter = ThreadCounter.getInstance();
         this.diary = Diary.getInstance();
     }
 
@@ -66,9 +62,9 @@ public class LeiaMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-        System.out.println(getName() + " starting initialize");
+//        System.out.println(getName() + " starting initialize");
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
-            System.out.println(this.getName() + " Is terminate");
+//            System.out.println(this.getName() + " Is terminate");
             this.diary.setLeiaTerminate(System.currentTimeMillis());
             this.terminate();
 
@@ -76,7 +72,7 @@ public class LeiaMicroservice extends MicroService {
 //        makeFutureQueue();
 //
 //        checkFutures();
-        System.out.println(this.getName() + " initialize successfully!");
+//        System.out.println(this.getName() + " initialize successfully!");
 
     }
 
