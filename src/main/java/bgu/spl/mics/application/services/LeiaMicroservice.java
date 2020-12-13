@@ -49,7 +49,7 @@ public class LeiaMicroservice extends MicroService {
 
     public void checkFutures(){
         while (!futureQueue.isEmpty()){
-            System.out.println(futureQueue.peek().get());
+//            System.out.println(futureQueue.peek().get());
             futureQueue.pop().get(); // TODO: this get or getTime????
         }
         // after all the attack events are completed, we send event to R2D2
@@ -67,7 +67,7 @@ public class LeiaMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-//        System.out.println(getName());
+        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             System.out.println(this.getName() + " Is terminate");
             this.terminate();

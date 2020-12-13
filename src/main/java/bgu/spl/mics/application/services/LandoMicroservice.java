@@ -20,7 +20,7 @@ public class LandoMicroservice  extends MicroService {
 
     @Override
     protected void initialize() {
-//        System.out.println(getName());
+        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             System.out.println(this.getName() + " Is terminate");
             this.terminate();
@@ -28,6 +28,7 @@ public class LandoMicroservice  extends MicroService {
 
         this.subscribeEvent(BombDestroyerEvent.class, message -> {
             try {
+                System.out.println("asssssssssssssssss");
                 Thread.sleep(duration);
                 System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + duration + " ms");
             } catch (InterruptedException e) {

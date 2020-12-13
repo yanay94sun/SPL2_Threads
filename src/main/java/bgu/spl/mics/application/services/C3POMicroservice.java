@@ -25,7 +25,8 @@ public class C3POMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-//        System.out.println(getName());
+
+        System.out.println(getName());
         subscribeBroadcast(TerminateBroadCast.class, message->{
             System.out.println(this.getName() + " Is terminate");
             this.terminate();
@@ -37,22 +38,18 @@ public class C3POMicroservice extends MicroService {
             if (available){
                 try {
                     Thread.sleep(message.getDuration());
-                    System.out.println("ZZZZZZZZZ " + this.getName() + " was sleeping for " + message.getDuration() + " ms");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(message.getSerial());
                 ewoks.releaseEwoks(message.getSerial());
                 complete(message, true);
             }
             else {
-                System.out.println("NOT AVAILABLE");
 
                 complete(message, false);
             }
         }
         );
-        System.out.println(this.getName() + " initialize successfully!");
     }
 
 

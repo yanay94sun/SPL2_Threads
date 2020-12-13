@@ -26,7 +26,7 @@ public class HanSoloMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-//        System.out.println(getName());
+        System.out.println(getName());
         this.subscribeBroadcast(TerminateBroadCast.class, message -> {
             System.out.println(this.getName() + " Is terminate");
             this.terminate();

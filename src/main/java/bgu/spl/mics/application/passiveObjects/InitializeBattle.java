@@ -10,11 +10,14 @@ import com.google.gson.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class InitializeBattle {
+
 
     public void run(String filePath) {
         //prase json
@@ -28,76 +31,74 @@ public class InitializeBattle {
         } catch (Exception e) {
             System.out.println("file not found");
         }
-//        //builds the matrix of all the subscribers
-//        Subscriber[][] subs = new Subscriber[4][];
+
         //reads from the json
         JsonArray attacks = battle.getAsJsonArray("attacks");
-        JsonObject R2D2 = battle.getAsJsonObject("R2D2");
-        JsonObject Lando = battle.getAsJsonObject("Lando");
-        JsonObject Ewoks = battle.getAsJsonObject("Ewoks");
+        JsonPrimitive r2d2Dur = battle.getAsJsonPrimitive("R2D2");
+        JsonPrimitive landoDur = battle.getAsJsonPrimitive("Lando");
+        JsonPrimitive ewoksNumNe = battle.getAsJsonPrimitive("Ewoks");
 
 
+        //This is the Data you going to use
+        Attack[] attacksArr = generateAttacks(attacks);
+        int r2d2Duration = generateDuration(r2d2Dur);
+        int landoDuration = generateDuration(landoDur);
+        int numEwoksNeed = generateNumEwoks(ewoksNumNe);   //@TODO ------>  WHY WE DONT USE IT???
 
 
-//
-//        //creates the inventory
-//        Inventory.getInstance().load(addToInventory(inventory));
-//        //creates the squad
-//        Squad.getInstance().load(addToSquad(squad));
-//        int numOfM = services.get("M").getAsInt();
-//        int numOfMoneyPenny = services.get("Moneypenny").getAsInt();
-//        JsonArray intelligence = services.getAsJsonArray("intelligence");
-//        int time = services.get("time").getAsInt();
-//        //creates the ms
-//        M[] msubs = setMs(numOfM);
-//        //creates the moneypennys
-//        Moneypenny[] moneypennnySubs = setMoneypennys(numOfMoneyPenny);
-//        //creates the intelligences
-//        Intelligence[] intelligenceSubs = setIntelligence(intelligence);
-//        //creates the q
-//        Q[] q = {new Q()};
-//        subs[0] = intelligenceSubs;
-//        subs[2] = q;
-//        subs[1] = msubs;
-//        subs[3] = moneypennnySubs;
-//        //calculates the number of subscribers
-//        int numOfSubsAndPubs = numOfM + numOfMoneyPenny + intelligenceSubs.length + q.length;
-//        //creates the threads and starts them
-//        Thread[] threads = new Thread[numOfSubsAndPubs+1];
-//        int index = 0;
-//        for (int i = 0; i <subs.length;i++){
-//            for (int j = 0; j<subs[i].length;j++){
-//                Thread thread = new Thread(subs[i][j]);
-//                threads[index] = thread;
-//                thread.setName(subs[i][j].getName());
-//                thread.start();
-//                index++;
-//            }
-//        }
-//        //makes sure to not start the time thread before all threads are initiliaze
-//        ThreadCounter threadCounter = ThreadCounter.GetInstance();
-//
-//        while (numOfSubsAndPubs != threadCounter.getCount().get()){
-//
-//        }
-//        //starts time thread
-//        TimeService timeService = new TimeService(time);
-//        Thread timeThread = new Thread(timeService);
-//        threads[index] = timeThread;
-//        timeThread.setName(timeService.getName());
-//        timeThread.start();
-//
-//        //kills the threads
-//        for (int i =0; i<threads.length;i++){
-//            try {
-//                threads[i].join();
-//            }
-//            catch (Exception e){
-//            }
+        //Creating the microServices.
+        ThreadCounter tc = ThreadCounter.getInstance();   //@TODO ------> need to change to AttackCounter (for diary)
+        HanSoloMicroservice hanSolo = new HanSoloMicroservice();
+        C3POMicroservice c3PO = new C3POMicroservice();
+        LeiaMicroservice leia = new LeiaMicroservice(attacksArr);
+        R2D2Microservice r2D2 = new R2D2Microservice(r2d2Duration);
+        LandoMicroservice landoMicroservice = new LandoMicroservice(landoDuration);
+
+        //Creating the Threads.
+        Thread t1 = new Thread(leia);
+        Thread t2 = new Thread(c3PO);
+        Thread t3 = new Thread(hanSolo);
+        Thread t4 = new Thread(r2D2);
+        Thread t5 = new Thread(landoMicroservice);
+
+        //Starting the Threads.
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+
+
         }
+
+    // this Function is creating the Attacks array that Leia get as a Parameter.
+    public Attack[] generateAttacks (JsonArray attacks){
+
+        Attack[] attacks_arr = new Attack[attacks.size()];
+        for (int i = 0; i < attacks.size(); i++) {
+            List<Integer> serials = new LinkedList<>();
+            JsonObject attackm = attacks.get(i).getAsJsonObject();
+            JsonArray ewoksSerials = attackm.getAsJsonArray("serials");
+            JsonPrimitive duration = attackm.getAsJsonPrimitive("duration");
+            int dur = duration.getAsInt();
+            for (int j = 0; j < ewoksSerials.size(); j++) {
+                serials.add(ewoksSerials.get(j).getAsInt());
+            }
+            attacks_arr[i] = new Attack(serials, dur);
+        }
+        return attacks_arr;
+    }
+
+    // this Function is creating the duration time for R2D2 and Lando.
+    public int generateDuration (JsonPrimitive dur){
+        return dur.getAsInt();
+    }
+
+    // this Function is creating the number of ewoks need for the attack (we are not using it).
+    public int generateNumEwoks (JsonPrimitive num){
+        return num.getAsInt();
     }
 
 
-
-
+}
 

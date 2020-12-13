@@ -35,10 +35,10 @@ public class Future<T> {
 		synchronized (this) {
 			while (!isDone) {
 				try {
-					System.out.println("I am in GET()!!");
+//					System.out.println("I am in GET()!!");
 					wait();
-					System.out.println("GOOD MORNING!! THANKS FOR NOTIFY ME");
-					System.out.println("----------------------------------------------------------------");
+//					System.out.println("GOOD MORNING!! THANKS FOR NOTIFY ME");
+//					System.out.println("----------------------------------------------------------------");
 				}
 				catch (Exception e) { // maybe here InterruptedException.. see next practice
 
@@ -55,8 +55,8 @@ public class Future<T> {
 		this.result=result;
 		isDone=true;
 		synchronized (this) { // why synchronized before notifyAll?? mybe because we need evrybody to wakeup now
-			System.out.println("I am about to notifyALL, GOOD MORNING print should be printed." );
-			System.out.println("----------------------------------------------------------------");
+//			System.out.println("I am about to notifyALL, GOOD MORNING print should be printed." );
+//			System.out.println("----------------------------------------------------------------");
 			notifyAll();
 		}
 		
