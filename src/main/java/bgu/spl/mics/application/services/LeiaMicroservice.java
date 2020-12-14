@@ -21,12 +21,16 @@ public class LeiaMicroservice extends MicroService {
 	private LinkedList<Future<Boolean>> futureQueue; // ?? check others futures ?????????????????????
     private Diary diary;
 
+
+
     public LeiaMicroservice(Attack[] attacks) {
         super("Leia");
 
 		this.attacks = attacks;
 		this.futureQueue = new LinkedList<>();
         this.diary = Diary.getInstance();
+
+
     }
 
 
@@ -44,8 +48,8 @@ public class LeiaMicroservice extends MicroService {
 
     public void checkFutures(){
         while (!futureQueue.isEmpty()){
-//            System.out.println(futureQueue.peek().get());
-            futureQueue.pop().get(); // TODO: this get or getTime????
+            Future f=  futureQueue.pop();
+            f.get(); // TODO: this get or getTime????
         }
         // after all the attack events are completed, we send event to R2D2
         this.sendEvent(new DeactivationEvent()).get();

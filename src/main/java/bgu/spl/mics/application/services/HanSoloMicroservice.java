@@ -53,7 +53,6 @@ public class HanSoloMicroservice extends MicroService {
 //                System.out.println(this.getName() + " Complete is mission and released the ewoks!");
             }
             else {
-//                System.out.println("NOT AVAILABLE");
                 complete(message, false);
             }
 

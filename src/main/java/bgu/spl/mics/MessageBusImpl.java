@@ -24,6 +24,12 @@ public class MessageBusImpl implements MessageBus {
 		messages = new ConcurrentHashMap<>(); // hashMap of messages that the key is the ???messages??? and the value is the microServices subscribe to it
 	}
 
+	public void clear(){
+		futures = new ConcurrentHashMap<Event, Future>();
+		microServices = new ConcurrentHashMap<MicroService, BlockingDeque<Message>>();
+		messages = new ConcurrentHashMap<Class<? extends Message>, ConcurrentLinkedQueue<MicroService>>();
+	}
+
 	public static MessageBusImpl getInstance() {
 		return messageBus;
 	} // /\/\ read online that should be getInstance in singelton
@@ -91,9 +97,9 @@ public class MessageBusImpl implements MessageBus {
 					if (m != null) { // check if the microservice is alive
 						microServices.get(m).add(e);
 						messages.get(e.getClass()).add(m);
+						return future;
 					}
 				}
-				return future;
 			}
 		}
 		return null;

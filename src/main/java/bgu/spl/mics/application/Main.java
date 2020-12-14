@@ -10,10 +10,11 @@ import bgu.spl.mics.application.passiveObjects.InitializeBattle;
  */
 public class Main {
 	public static void main(String[] args) {
-		if (args.length != 0) {
+//		if (args.length != 0) {
+
 			InitializeBattle m = new InitializeBattle();
-			m.run(args[0]);
-			m.outputFile(args[1]);
-		}
+			m.run("input.json");
+			m.outputFile("Output.json");
+//		}
 	}
 }

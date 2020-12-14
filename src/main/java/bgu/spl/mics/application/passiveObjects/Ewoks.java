@@ -63,6 +63,10 @@ public class Ewoks {
         }
     }
 
+    public void clear(){
+        this.ewoks = new HashMap<Integer, Ewok>();
+    }
+
     /**
      * 	public void sendAgents(List<String> serials, int time){
      * 		//sends the agents

@@ -1,5 +1,7 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import bgu.spl.mics.MessageBus;
+import bgu.spl.mics.MessageBusImpl;
 import bgu.spl.mics.application.services.*;
 
 
@@ -13,6 +15,8 @@ public class InitializeBattle {
 
 
     public void run(String filePath) {
+        Ewoks.getInstance().clear();
+        MessageBusImpl.getInstance().clear();
         //prase json
         BufferedReader buffer;
         Gson g;
@@ -23,7 +27,9 @@ public class InitializeBattle {
             battle = g.fromJson(buffer, JsonObject.class);
         } catch (Exception e) {
             System.out.println("file not found");
+            System.out.println("file not found");
         }
+
 
         //reads from the json
         JsonArray attacks = battle.getAsJsonArray("attacks");

@@ -54,7 +54,6 @@ public class C3POMicroservice extends MicroService {
                 complete(message, true);
             }
             else {
-//                System.out.println("NOT AVAILABLE");
                 complete(message, false);
             }
         }
